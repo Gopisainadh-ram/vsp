@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 480" role="img" aria-label="Bottle of cold-pressed oil">
+  <rect width="720" height="480" rx="28" fill="#f3ead4"/>
+  <circle cx="570" cy="112" r="95" fill="#e9d8ae"/>
+  <path d="M75 366c79-72 153-92 224-62 62 26 117 21 183-25 46-32 99-42 163-24v225H75z" fill="#d9e3ce"/>
+  <path d="M311 105h98v39c0 20 48 39 48 79v156c0 22-18 40-40 40H303c-22 0-40-18-40-40V223c0-40 48-59 48-79z" fill="#d99b2b" stroke="#75501d" stroke-width="8"/>
+  <rect x="330" y="67" width="60" height="43" rx="9" fill="#315b3f"/>
+  <path d="M277 246h166v107H277z" rx="12" fill="#fffaf0"/>
+  <text x="360" y="290" text-anchor="middle" fill="#315b3f" font-family="Georgia,serif" font-size="35" font-weight="bold">VSP</text>
+  <text x="360" y="325" text-anchor="middle" fill="#75674d" font-family="Arial,sans-serif" font-size="16" letter-spacing="3">COLD PRESSED</text>
+  <path d="M117 360c20-54 57-82 111-84-3 50-37 84-101 101m71 11c19-48 54-73 103-73-4 45-36 75-93 90" fill="none" stroke="#668057" stroke-width="12" stroke-linecap="round"/>
+</svg>

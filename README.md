@@ -1,96 +1,37 @@
-# Vsp
+# VSP Cold Pressed Oils & Dry Fruits — Nx monorepo
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
-
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
-
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
-
-## Run tasks
-
-To run tasks with Nx use:
-
-```sh
-npx nx <target> <project-name>
 ```
-
-For example:
-
-```sh
-npx nx build myproject
+apps/api        Node.js + Express + Socket.IO + Prisma (PostgreSQL)
+apps/web        Angular 18 storefront, owner dashboard and chat
+libs/shared     Types and permission rules used by BOTH apps
 ```
+One `package.json`, one `npm install`, one `.env`.
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+## Run locally
+1. Install Node.js 22 and PostgreSQL. Create an empty database named `vsp`.
+2. `npm install`
+3. Copy `.env.example` to `.env` and fill in DATABASE_URL, the two secrets, WHATSAPP_ADMIN_NUMBER, SEED_ADMIN_PASSWORD.
+4. `npm run db:migrate -- --name init`  (creates tables; keep the generated `migrations` folder)
+5. `npm run db:seed`                     (owner account + sample products)
+6. `npm run dev`                         (API on :4000, website on http://localhost:4200)
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Commands
+| Command | What it does |
+|---|---|
+| `npm run dev` | API + website together |
+| `npm run serve:api` / `serve:web` | Run one app |
+| `npm run build` | Production builds into `dist/apps/api` and `dist/apps/web` |
+| `npm run start:api` | Run the built API (`NODE_ENV=production`, env vars set in the shell) |
+| `npm run typecheck` | Type-check shared lib, API and web |
+| `npm run db:migrate` / `db:deploy` / `db:seed` / `db:studio` | Database tasks |
+| `npx nx graph` | See project dependencies |
 
-## Add new projects
+## Production notes
+Serve `dist/apps/web/browser` with any static host/nginx, proxying `/api`, `/uploads` and `/socket.io` to the API (same origin, so the refresh cookie works). Use HTTPS, set `COOKIE_SECURE=true` and `CORS_ORIGINS=https://vspoils.com`. Use `npm run db:deploy` (not `db:migrate`) on the server.
 
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
+## Security (OWASP Top 10)
+Argon2id passwords, OTP verification, lockout, rotating httpOnly refresh cookie, short-lived access tokens, permission-based access control, zod validation on every input, Prisma parameterised queries, helmet + rate limits + CORS allow-list, upload allow-list with magic-byte checks, server-side pricing, atomic stock updates, redacted structured logs, one fixed outbound host (no SSRF).
+Not included yet: CAPTCHA on guest checkout, owner 2FA, upload malware scanning.
 
-To install a new plugin you can use the `nx add` command. Here's an example of adding the React plugin:
-```sh
-npx nx add @nx/react
-```
-
-Use the plugin's generator to create new projects. For example, to create a new React app or library:
-
-```sh
-# Generate an app
-npx nx g @nx/react:app demo
-
-# Generate a library
-npx nx g @nx/react:lib some-lib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Before launch
+Use the Owner dashboard to add products with their sizes, prices and current stock, adjust inventory, and review or update customer orders. Customers can search, filter and sort the catalog to suit their preferences. Orders appear in the dashboard and are also sent through the configured WhatsApp notification (or the fallback link). Edit `apps/web/src/app/business.ts`, configure SMTP and an SMS provider (`apps/api/src/lib/notifier.ts`), and set WhatsApp Cloud API credentials.

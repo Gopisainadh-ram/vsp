@@ -34,12 +34,22 @@ yarn-error.log
 testem.log
 /typings
 
-# System Files
+# system files
 .DS_Store
 Thumbs.db
 
+# local environment and uploads
+.env
+.env.*
+!.env.example
+uploads
+
+# Angular and Nx caches
+.angular
 .nx/cache
 .nx/workspace-data
 .nx/migrate-runs
+
+# Claude local state
 .claude/worktrees
 .claude/settings.local.json
